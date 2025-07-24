@@ -1,1 +1,45 @@
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Retirement Planning Form</title>
+</head>
+<body>
+  <h1>Retirement Planning Questionnaire</h1>
+  <form id="retirementForm">
+    <label>Full Name: <input type="text" name="fullName" required></label><br>
+    <label>Date of Birth: <input type="date" name="dob" required></label><br>
+    <label>Marital Status: <input type="text" name="maritalStatus" required></label><br>
+    <label>Current Occupation: <input type="text" name="occupation" required></label><br>
+    <label>Annual Income: <input type="number" name="income" required></label><br>
+    <label>Do you have any dependents? <textarea name="dependents"></textarea></label><br>
+    <label>Do you have any assets/investments? <textarea name="assets"></textarea></label><br>
+    <label>Current Liabilities (if any): <textarea name="liabilities"></textarea></label><br>
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="status"></p>
+
+  <script>
+    document.getElementById('retirementForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = {};
+      formData.forEach((value, key) => data[key] = value);
+
+      const response = await fetch('http://localhost:3000/save-html', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      document.getElementById('status').innerText = result.message;
+    });
+  </script>
+</body>
+</html>
+
