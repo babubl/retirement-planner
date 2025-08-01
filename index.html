@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Retirement Planning Questionnaire</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      background: linear-gradient(to right, #e0f7fa, #ffffff);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding-bottom: 4rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    section.section {
+      background: #ffffff;
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      font-weight: 600;
+      color: #00796b;
+    }
+
+    .form-label {
+      font-weight: 500;
+    }
+
+    .btn-save {
+      background-color: #00796b;
+      color: white;
+    }
+
+    /* Help text styling */
+    .section-help-text {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 1rem;
+      border-left: 3px solid #00796b;
+      padding-left: 10px;
+      font-style: italic;
+    }
+
+    /* Dependent section subheading */
+    #dependentsSection h5 {
+      margin-top: 15px;
+      color: #00796b;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container mt-4">
+    <h1 class="text-center">Retirement Planning Questionnaire</h1>
+
+    <form id="retirementForm">
+
+      <!-- Section 1: Personal Information -->
+      <section class="section" aria-labelledby="section1-heading">
+        <h2 id="section1-heading">Section 1: Personal Information</h2>
+        <p class="section-help-text">
+          🎯 <strong>Purpose of This Section:</strong> This section lays the foundation for the entire retirement plan.
+          Age and retirement target determine the time horizon, which is the most important factor in planning. It impacts how aggressively one can invest and how much they need to save annually.
+          Health status can significantly influence retirement duration, healthcare costs, and insurance needs.
+          Dependents introduce additional financial responsibilities that need to be protected and planned for—both now and after retirement.
+          <br /><br />
+          🔍 <strong>Why it matters:</strong> Retirement planning isn’t just about numbers. It’s about designing a lifestyle and support system for yourself and the people who depend on you. Without clarity here, everything else becomes guesswork.
+        </p>
+
+        <div class="mb-3">
+          <label for="currentAge" class="form-label">What is your current age?</label>
+          <input type="number" min="0" step="1" class="form-control" name="currentAge" id="currentAge" required placeholder="Enter your age in years" />
+        </div>
+
+        <div class="mb-3">
+          <label for="retirementAge" class="form-label">At what age do you plan to retire?</label>
+          <input type="number" min="0" step="1" class="form-control" name="retirementAge" id="retirementAge" required placeholder="Enter your target retirement age" />
+        </div>
+
+        <div class="mb-3">
+          <label for="healthStatus" class="form-label">How would you describe your current health status?</label>
+          <textarea class="form-control" name="healthStatus" id="healthStatus" required placeholder="Good / Average / Needs Attention or add more details"></textarea>
+        </div>
+
+        <fieldset class="mb-3">
+          <legend class="form-label">Do you have any financial dependents?</legend>
+          <div>
+            <input type="radio" id="hasDependentsYes" name="hasDependents" value="Yes" required onclick="toggleDependents(true)" />
+            <label for="hasDependentsYes">Yes</label>
+            &nbsp;&nbsp;&nbsp;
+            <input type="radio" id="hasDependentsNo" name="hasDependents" value="No" onclick="toggleDependents(false)" />
+            <label for="hasDependentsNo">No</label>
+          </div>
+        </fieldset>
+
+        <div id="dependentsSection" style="display: none;">
+          <h5>Dependent Details</h5>
+          <div id="dependentsContainer"></div>
+          <button type="button" class="btn btn-secondary btn-sm mt-2" onclick="addDependent()">Add Dependent</button>
+        </div>
+      </section>
+
+      <!-- Section 2: Income and Employment -->
+      <section class="section" aria-labelledby="section2-heading">
+        <h2 id="section2-heading">Section 2: Income and Employment</h2>
+        <p class="section-help-text">
+          Understanding your income sources — now and in the future — is crucial to crafting a sustainable savings plan and retirement strategy.
+        </p>
+
+        <div class="mb-3">
+          <label for="annualIncome" class="form-label">What is your current annual income?</label>
+          <input type="number" min="0" step="any" class="form-control" name="annualIncome" id="annualIncome" required placeholder="Enter your annual income amount" />
+        </div>
+
+        <div class="mb-3">
+          <label for="futureIncomeChanges" class="form-label">Do you expect any significant changes in your income in the future?</label>
+          <textarea class="form-control" name="futureIncomeChanges" id="futureIncomeChanges" placeholder="Please describe any expected changes, e.g., promotion, side income, job change"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="spouseIncome" class="form-label">What is your spouse’s annual income (if applicable)?</label>
+          <input type="number" min="0" step="any" class="form-control" name="spouseIncome" id="spouseIncome" placeholder="Enter spouse's annual income if applicable" />
+        </div>
+
+        <div class="mb-3">
+          <label for="otherIncome" class="form-label">Are there any other sources of income?</label>
+          <textarea class="form-control" name="otherIncome" id="otherIncome" placeholder="E.g., rental, dividends, freelance"></textarea>
+        </div>
+      </section>
+
+      <!-- Section 3: Expenses -->
+      <section class="section" aria-labelledby="section3-heading">
+        <h2 id="section3-heading">Section 3: Expenses</h2>
+        <p class="section-help-text">
+          Knowing your current expenses and upcoming financial obligations helps estimate your retirement needs accurately.
+        </p>
+
+        <div class="mb-3">
+          <label for="monthlyExpenses" class="form-label">What are your current monthly living expenses? *</label>
+          <input type="number" min="0" step="any" class="form-control" name="monthlyExpenses" id="monthlyExpenses" required placeholder="Monthly expenses amount" />
+        </div>
+
+        <div class="mb-3">
+          <label for="ongoingLoans" class="form-label">Do you have any ongoing EMIs or loans?</label>
+          <textarea class="form-control" name="ongoingLoans" id="ongoingLoans" rows="3" placeholder="E.g., home loan, car loan, credit card dues"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="futureExpenseChange" class="form-label">Expected changes in your expenses in the future?</label>
+          <textarea class="form-control" name="futureExpenseChange" id="futureExpenseChange" rows="3" placeholder="E.g., children’s education, mortgage payoff"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="majorUpcomingExpenses" class="form-label">Do you anticipate any major expenses in the near future?</label>
+          <textarea class="form-control" name="majorUpcomingExpenses" id="majorUpcomingExpenses" rows="3" placeholder="E.g., home renovation, travel, big purchases"></textarea>
+        </div>
+      </section>
+
+      <!-- Section 4: Savings and Investments -->
+      <section class="section" aria-labelledby="section4-heading">
+        <h2 id="section4-heading">Section 4: Savings and Investments</h2>
+        <p class="section-help-text">
+          Knowing your current savings and investment allocation helps evaluate progress and adjust your plan to reach your retirement goals.
+        </p>
+
+        <div class="mb-3">
+          <label for="retirementSavings" class="form-label">How much have you currently saved for retirement? *</label>
+          <input type="number" min="0" step="any" class="form-control" name="retirementSavings" id="retirementSavings" required placeholder="Total retirement savings amount" />
+        </div>
+
+        <div class="mb-3">
+          <label for="investmentAccounts" class="form-label">What types of investment accounts do you have? *</label>
+          <textarea class="form-control" name="investmentAccounts" id="investmentAccounts" rows="3" placeholder="E.g., PF, PPF, NPS, stocks, mutual funds, real estate"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="savingsRate" class="form-label">Approximate monthly or annual savings rate?</label>
+          <input type="number" min="0" step="any" class="form-control" name="savingsRate" id="savingsRate" placeholder="E.g., amount saved monthly or annually" />
+        </div>
+
+        <div class="mb-3">
+          <label for="investmentAllocation" class="form-label">How are your investments currently allocated?</label>
+          <textarea class="form-control" name="investmentAllocation" id="investmentAllocation" rows="3" placeholder="Provide a rough % split across equity, debt, gold, real estate, etc."></textarea>
+        </div>
+      </section>
+
+      <!-- Section 5: Risk Tolerance and Investment Preferences -->
+      <section class="section" aria-labelledby="section5-heading">
+        <h2 id="section5-heading">Section 5: Risk Tolerance and Investment Preferences</h2>
+        <p class="section-help-text">
+          Knowing how comfortable you are with investment risks helps in selecting appropriate products that align with your peace of mind.
+        </p>
+
+        <div class="mb-3">
+          <label for="riskTolerance" class="form-label">How would you describe your risk tolerance? *</label>
+          <select class="form-select" name="riskTolerance" id="riskTolerance" required>
+            <option value="">-- Select --</option>
+            <option value="Low">Low</option>
+            <option value="Moderate">Moderate</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="investmentPreferences" class="form-label">Are there specific types of investments you prefer or avoid?</label>
+          <textarea class="form-control" name="investmentPreferences" id="investmentPreferences" rows="3" placeholder="E.g., prefer stocks, avoid high-risk bonds"></textarea>
+        </div>
+      </section>
+
+      <!-- Section 6: Insurance -->
+      <section class="section" aria-labelledby="section6-heading">
+        <h2 id="section6-heading">Section 6: Insurance</h2>
+        <p class="section-help-text">
+          Insurance coverage safeguards your financial well-being against unforeseen health and life events—key to protecting your retirement savings.
+        </p>
+
+        <div class="mb-3">
+          <label for="insurancePolicies" class="form-label">What insurance policies do you currently have? *</label>
+          <textarea class="form-control" name="insurancePolicies" id="insurancePolicies" rows="3" placeholder="E.g., life, health, term, accident, critical illness"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="insuranceAdequacy" class="form-label">Do you think your insurance coverage is adequate?</label>
+          <textarea class="form-control" name="insuranceAdequacy" id="insuranceAdequacy" rows="3" placeholder="Yes / No / Need more coverage or details"></textarea>
+        </div>
+      </section>
+
+      <!-- Section 7: Retirement Goals and Lifestyle -->
+      <section class="section" aria-labelledby="section7-heading">
+        <h2 id="section7-heading">Section 7: Retirement Goals and Lifestyle</h2>
+        <p class="section-help-text">
+          Retirement is not just about finances—it’s about the lifestyle and activities you aspire to enjoy once you stop working.
+        </p>
+
+        <div class="mb-3">
+          <label for="retirementLifestyle" class="form-label">What lifestyle do you aspire to have in retirement? *</label>
+          <textarea class="form-control" name="retirementLifestyle" id="retirementLifestyle" rows="3" placeholder="E.g., relaxed, travel-focused, village life, relocation"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="retirementGoals" class="form-label">Specific goals you wish to achieve during retirement?</label>
+          <textarea class="form-control" name="retirementGoals" id="retirementGoals" rows="3" placeholder="E.g., charity work, hobbies, starting a business"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="postRetirementIncome" class="form-label">Do you plan to work or earn income during retirement?</label>
+          <input type="text" class="form-control" name="postRetirementIncome" id="postRetirementIncome" placeholder="E.g., part-time job, consulting" />
+        </div>
+      </section>
+
+      <!-- Section 8: Health Care and Long-Term Care -->
+      <section class="section" aria-labelledby="section8-heading">
+        <h2 id="section8-heading">Section 8: Health Care and Long-Term Care</h2>
+        <p class="section-help-text">
+          Medical and long-term care expenses can impact your retirement savings significantly; planning now helps avoid financial stress later.
+        </p>
+
+        <div class="mb-3">
+          <label for="healthcarePlanning" class="form-label">Have you planned for healthcare costs in retirement?</label>
+          <textarea class="form-control" name="healthcarePlanning" id="healthcarePlanning" rows="3" placeholder="Please describe healthcare cost planning if any"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="longTermCarePlan" class="form-label">Do you have long-term care insurance or a plan for elderly care?</label>
+          <textarea class="form-control" name="longTermCarePlan" id="longTermCarePlan" rows="3" placeholder="E.g., insurance, family support, assisted living plans"></textarea>
+        </div>
+      </section>
+
+      <!-- Section 9: Estate Planning -->
+      <section class="section" aria-labelledby="section9-heading">
+        <h2 id="section9-heading">Section 9: Estate Planning</h2>
+        <p class="section-help-text">
+          Estate planning ensures your assets and wishes are honored, providing peace of mind for you and your heirs.
+        </p>
+
+        <div class="mb-3">
+          <label for="estatePlanStatus" class="form-label">Do you have a will or estate plan in place? *</label>
+          <select class="form-select" name="estatePlanStatus" id="estatePlanStatus" required>
+            <option value="">-- Select --</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+            <option value="Planning to create one">Planning to create one</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="estateHandling" class="form-label">How do you plan to handle your estate after your passing?</label>
+          <textarea class="form-control" name="estateHandling" id="estateHandling" rows="3" placeholder="Describe your estate handling plans"></textarea>
+        </div>
+      </section>
+
+      <!-- Section 10: Miscellaneous Commitments and Concerns -->
+      <section class="section" aria-labelledby="section10-heading">
+        <h2 id="section10-heading">Section 10: Miscellaneous Commitments and Concerns</h2>
+        <p class="section-help-text">
+          Factoring in all commitments and concerns ensures your retirement plan is comprehensive and realistic.
+        </p>
+
+        <div class="mb-3">
+          <label for="otherCommitments" class="form-label">Are there any other financial commitments or considerations?</label>
+          <textarea class="form-control" name="otherCommitments" id="otherCommitments" rows="3" placeholder="E.g., financial support to family members, personal loans, side projects"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="retirementConcerns" class="form-label">What are your main concerns or priorities regarding retirement planning?</label>
+          <textarea class="form-control" name="retirementConcerns" id="retirementConcerns" rows="3" placeholder="Please describe your concerns or priorities"></textarea>
+        </div>
+      </section>
+
+      <!-- Submit & Save Buttons -->
+      <div class="text-center mt-4 mb-5">
+        <button type="button" class="btn btn-save me-2" onclick="saveAsJSON()">💾 Save as JSON</button>
+        <button type="button" class="btn btn-outline-primary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    function toggleDependents(show) {
+      document.getElementById('dependentsSection').style.display = show ? 'block' : 'none';
+      if (!show) {
+        // Clear dependents if 'No' is selected
+        document.getElementById('dependentsContainer').innerHTML = '';
+      }
+    }
+
+    function addDependent() {
+      const container = document.getElementById('dependentsContainer');
+      const index = container.children.length;
+      const dependentHTML = `
+        <div class="border rounded p-3 mb-3" role="group" aria-labelledby="dependentHeading${index}">
+          <h6 id="dependentHeading${index}" class="mb-3">Dependent ${index + 1}</h6>
+
+          <div class="mb-2">
+            <label for="dependentAge_${index}" class="form-label">Age</label>
+            <input type="number" min="0" step="1" class="form-control" name="dependentAge[]" id="dependentAge_${index}" placeholder="Enter age" />
+          </div>
+
+          <div class="mb-2">
+            <label for="dependentSex_${index}" class="form-label">Sex</label>
+            <select class="form-select" name="dependentSex[]" id="dependentSex_${index}">
+              <option value="">-- Select --</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="mb-2">
+            <label for="dependentRelation_${index}" class="form-label">Relationship</label>
+            <input type="text" class="form-control" name="dependentRelation[]" id="dependentRelation_${index}" placeholder="E.g., child, parent" />
+          </div>
+
+          <div class="mb-2">
+            <label for="dependentNeeds_${index}" class="form-label">Any special financial needs? (education, healthcare, etc.)</label>
+            <textarea class="form-control" name="dependentNeeds[]" id="dependentNeeds_${index}" placeholder="Describe any special needs"></textarea>
+          </div>
+        </div>`;
+      container.insertAdjacentHTML('beforeend', dependentHTML);
+    }
+
+    function saveAsJSON() {
+      const form = document.getElementById('retirementForm');
+      const formData = new FormData(form);
+      const json = {};
+
+      formData.forEach((value, key) => {
+        // Handle array inputs ending with '[]'
+        if (key.endsWith('[]')) {
+          const cleanKey = key.slice(0, -2);
+          if (!json[cleanKey]) {
+            json[cleanKey] = [];
+          }
+          json[cleanKey].push(value);
+        } else {
+          if (json[key]) {
+            if (!Array.isArray(json[key])) {
+              json[key] = [json[key]];
+            }
+            json[key].push(value);
+          } else {
+            // Attempt to parse numbers for numeric fields
+            if (
+              ['currentAge', 'retirementAge', 'annualIncome', 'spouseIncome', 'monthlyExpenses',
+                'retirementSavings', 'savingsRate'].includes(key)
+            ) {
+              const num = Number(value);
+              json[key] = isNaN(num) ? value : num;
+            } else {
+              json[key] = value;
+            }
+          }
+        }
+      });
+
+      const blob = new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'retirement_response.json';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+</body>
+
+</html>
